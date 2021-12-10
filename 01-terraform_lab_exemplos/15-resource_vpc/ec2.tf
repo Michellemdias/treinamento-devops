@@ -20,21 +20,6 @@ resource "aws_instance" "web2" {
   ]
 }
 
-output "public_ip_dns" {
-  value = [
-    for web in aws_instance.web2 :
-    <<EOF
-     Public IP : ${web.public_ip} 
-     Public DNS: ${web.public_dns}
-     ssh -i /home/ubuntu/michelle-rsa-dev.pem ubuntu@${web.public_ip}
-    EOF
-  ]
-}
-
-data "http" "meuip" {
-  url = "http://ipv4.icanhazip.com"
-}
-
 
 
 
