@@ -2,7 +2,9 @@ resource "aws_security_group" "allow_ssh" {
   name        = "michelle_ssh_tf"
   description = "Allow SSH inbound traffic"
   vpc_id      = aws_vpc.main.id
-
+  tags = {
+    Name = "michelle_ssh_tf"
+  }
   ingress = [
     {
       description      = "SSH from VPC"

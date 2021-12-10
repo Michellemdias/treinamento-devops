@@ -8,10 +8,6 @@ resource "aws_vpc" "main" {
     Name = "vpc-michelle-tf"
   }
 }
-output "vpc" {
-  value = aws_vpc.main.id
-
-}
 
 resource "aws_subnet" "my_subnet_a" {
   vpc_id            = aws_vpc.main.id
