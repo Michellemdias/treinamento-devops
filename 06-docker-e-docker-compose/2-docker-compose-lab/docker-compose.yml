@@ -14,6 +14,6 @@ services:
   
   java:
     container_name: validador-cpf-java-turma-devops
-    image: didox/validador-cpf-java-turma-devops:latest
+    image: michellemdias/validador-cpf-java-turma-devops:0.0.1
     ports:
       - "8080:8080"

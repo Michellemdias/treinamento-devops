@@ -1,1 +1,1 @@
-Olá alunos bem vindo ao terraform 0.0
+Olá aluno(s) bem vindo ao terraform 0.0

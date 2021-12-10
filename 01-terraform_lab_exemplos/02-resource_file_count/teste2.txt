@@ -1,1 +1,1 @@
-Olá alunos bem vindo ao terraform 2.0
+Olá aluno(s) bem vindo ao terraform 2.0

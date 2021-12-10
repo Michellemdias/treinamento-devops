@@ -1,0 +1,5 @@
+image_id =  "ami-0e66f5495b4efdd0f"
+subnet =  "subnet-041d7c9082c0a8416"
+instance = "t2.micro"
+name_id = "michelle-ec2-teste"
+sc_grp = "sg-0f2a5e038740095de"
