@@ -2,14 +2,14 @@
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc
 resource "aws_vpc" "main" {
   cidr_block       = "10.140.0.0/16" # uma classe de IP
-  instance_tenancy = "default"  # - (Optional) A tenancy option for instances launched into the VPC. Default is default, which makes your instances shared on the host. Using either of the other options (dedicated or host) costs at least $2/hr.
+  instance_tenancy = "default"       # - (Optional) A tenancy option for instances launched into the VPC. Default is default, which makes your instances shared on the host. Using either of the other options (dedicated or host) costs at least $2/hr.
   tags = {
     Name = "vpc-michelle-tf"
   }
 }
-output vpc {
-  value       = aws_vpc.main.id
-  
+output "vpc" {
+  value = aws_vpc.main.id
+
 }
 
 resource "aws_subnet" "my_subnet_a" {
@@ -52,21 +52,21 @@ resource "aws_route_table" "rt_terraform" {
   vpc_id = aws_vpc.main.id
 
   route = [
-      {
-        carrier_gateway_id         = ""
-        cidr_block                 = "0.0.0.0/0"
-        destination_prefix_list_id = ""
-        egress_only_gateway_id     = ""
-        gateway_id                 = aws_internet_gateway.gw.id
-        instance_id                = ""
-        ipv6_cidr_block            = ""
-        local_gateway_id           = ""
-        nat_gateway_id             = ""
-        network_interface_id       = ""
-        transit_gateway_id         = ""
-        vpc_endpoint_id            = ""
-        vpc_peering_connection_id  = ""
-      }
+    {
+      carrier_gateway_id         = ""
+      cidr_block                 = "0.0.0.0/0"
+      destination_prefix_list_id = ""
+      egress_only_gateway_id     = ""
+      gateway_id                 = aws_internet_gateway.gw.id
+      instance_id                = ""
+      ipv6_cidr_block            = ""
+      local_gateway_id           = ""
+      nat_gateway_id             = ""
+      network_interface_id       = ""
+      transit_gateway_id         = ""
+      vpc_endpoint_id            = ""
+      vpc_peering_connection_id  = ""
+    }
   ]
 
   tags = {
