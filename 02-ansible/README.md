@@ -1,3 +1,3 @@
- ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/Desktop/devops/treinamentoItau
+ ansible-playbook -i hosts inicio.yaml -u ubuntu --private-key ~/michelle-rsa-dev-pem
 
- ssh -i ~/Desktop/devops/treinamentoItau ubuntu@ec2-3-93-240-108.compute-1.amazonaws.com
+ ssh -i ~/michelle-rsa-dev-pem ubuntu@ec2-18-229-117-203.sa-east-1.compute.amazonaws.com
