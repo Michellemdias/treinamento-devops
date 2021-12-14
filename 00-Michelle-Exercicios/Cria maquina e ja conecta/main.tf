@@ -119,7 +119,7 @@ resource "aws_security_group" "allow_ssh" {
       prefix_list_ids = null,
       security_groups = null,
       self            = null
-    }
+    },
     {
       description      = "HTTP"
       from_port        = 80

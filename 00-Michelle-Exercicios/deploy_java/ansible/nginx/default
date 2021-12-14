@@ -1,5 +1,0 @@
-upstream loadbalancer {
-        server   http://localhost:8080;
-
-}
-server {location / {proxy_pass http://loadbalancer;}}

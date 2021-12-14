@@ -1,5 +1,9 @@
 - hosts: all
- 
+  environment:
+    DATABASE_URL: "mysql://localhost:3306/SpringWebYoutube?useTimezone=true&serverTimezone=UTC"
+    PASSWORD: "root"
+    USER: "root" 
+
   tasks:
   - name: "Roda: sudo apt update"
     become: yes
@@ -22,53 +26,74 @@
       - python3-mysqldb
       
 
-  - name: "Fazendo downlaod do template"
-    get_url:
-      url: "https://github.com/torneseumprogramador/spring-web-youtube/archive/refs/heads/main.zip"
-      dest: "/tmp/spring_web.zip"
+  # - name: "Fazendo downlaod do template"
+  #   get_url:
+  #     url: "https://github.com/torneseumprogramador/spring-web-youtube/archive/refs/heads/main.zip"
+  #     dest: "/tmp/spring_web.zip"
 
-  - name: "Fazendo descompactação dos arquivos do WP"
-    unarchive:
-      src: "/tmp/spring_web.zip"
-      dest: "/var/www"
-      remote_src: yes
-    become: yes
+  # - name: "Fazendo descompactação dos arquivos do WP"
+  #   unarchive:
+  #     src: "/tmp/spring_web.zip"
+  #     dest: "/var/www"
+  #     remote_src: yes
+  #   become: yes
+
+  - name: "clone projeto"
+    ansible.builtin.git:
+      repo: 'https://github.com/torneseumprogramador/spring-web-youtube'
+      dest: /home/ubuntu/spring-web-youtube
+      clone: yes
+      update: yes
+
+  - name: Adicionar USER no bashrc
+    lineinfile: dest=~/.bashrc line='export USER="root"' state=present
+
+  - name: Adicionar PASSWORD no bashrc
+    lineinfile: dest=~/.bashrc line='export PASSWORD="root"' state=present
+
+  - name: Adicionar DATABASE_URL no bashrc
+    lineinfile: dest=~/.bashrc line='export DATABASE_URL="mysql://localhost:3306/SpringWebYoutube?useTimezone=true&serverTimezone=UTC"' state=present
+
+  - name: Aplicar o bashrc
+    shell: source ~/.bashrc
+    args:
+      executable: /bin/bash
 
   - name: Roda maven package
-    shell: "USER=root PASSWORD=root DATABASE_URL='mysql://localhost:3306/SpringWebYoutube?useTimezone=true&serverTimezone=UTC';cd /var/www/spring-web-youtube-main;sudo mvn package"
+    shell: "cd spring-web-youtube && mvn package"
+   
+
+  - name: "startando VPS"
+    shell: "cd spring-web-youtube && nohup mvn spring-boot:start &"
+
+  - name: "Trocando nginx para VPS"
+    copy:
+      src: "nginx/default"
+      dest: "/etc/nginx/sites-available/default"
     become: yes
-
-    # - name: Adicionar no bashrc
-    #   lineinfile: dest=~/.bashrc line='export API_URL=https://localhost:5001' state=present
-
-    # - name: Aplicar o bashrc
-    #   shell: source ~/.bashrc
-    #   args:
-    #     executable: /bin/bash
 
   - name: "Lavanta serviço do mysql"
     become: yes
     service:
       name: mysql
       state: started
+  
 
-  - name: "Criando senha root mysql"
+  # - name: "Criando senha root mysql"
+  #   become: yes
+  #   mysql_user:
+  #     name: root
+  #     host: localhost
+  #     password: root
+  #     priv: "*.*:ALL,GRANT"
+  #     state: present
+
+  # - name: "Cria o banco de dados MySQL"
+  #   mysql_db:
+  #     name: SpringWebYoutube
+  #     login_user: root
+  #     login_password: root
+  #     state: present
+  - name: restart Apache
+    shell: sudo systemctl restart nginx
     become: yes
-    mysql_user:
-      name: root
-      host: localhost
-      password: root
-      priv: "*.*:ALL,GRANT"
-      state: present
-
-  - name: "Cria o banco de dados MySQL"
-    mysql_db:
-      name: SpringWebYoutube
-      login_user: root
-      login_password: root
-      state: present
-
-  # - shell: cat /etc/apache2/sites-available/000-default.conf | grep 'wordpress'
-  #   register:  ps
-  # - debug:
-  #     msg: " '{{ ps.stdout_lines}}' "
